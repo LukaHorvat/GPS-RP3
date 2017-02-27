@@ -44,6 +44,7 @@ namespace GPS.Views
             characteristic.Name = this.textBox1.Text;
             characteristic.Description = this.richTextBox1.Text;
             node.Data.Characteristics.Add(characteristic);
+            node.graph.SaveChanges();
             Close();
         }
     }

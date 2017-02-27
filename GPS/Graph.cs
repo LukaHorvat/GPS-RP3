@@ -51,7 +51,7 @@ namespace GPS
             set { deletedIds = JsonConvert.DeserializeObject<SortedSet<int>>(value); }
         }
 
-        private Dictionary<int, Dictionary<int, Tuple<TEdge, double>>> connections;
+        public Dictionary<int, Dictionary<int, Tuple<TEdge, double>>> connections;
         private Dictionary<int, TNode> data;
         private SortedSet<int> usedIds;
         private SortedSet<int> deletedIds;
@@ -59,7 +59,7 @@ namespace GPS
         public IEnumerable<Node> Nodes => data.Keys.Select(NodeFromIndex);
 
         private static Func<int, Graph<TNode, TEdge>, Node> makeNode;
-        private Node NodeFromIndex(int idx) => makeNode(idx, this);
+        public Node NodeFromIndex(int idx) => makeNode(idx, this);
 
         static Graph()
         {
@@ -118,7 +118,7 @@ namespace GPS
             }
 
             private int idx;
-            private Graph<TNode, TEdge> graph;
+            public Graph<TNode, TEdge> graph;
 
             private Node(int idx, Graph<TNode, TEdge> graph) { this.idx = idx; this.graph = graph; }
 
@@ -133,7 +133,7 @@ namespace GPS
                 if (graph.deletedIds.Contains(idx)) throw new InvalidOperationException("Node is deleted");
                 graph.connections[idx][other.idx] = Tuple.Create(data, distance);
 
-                Program.DbContext.SaveChanges();
+                graph.SaveChanges();
             }
 
             public void ConnectBothWays(TEdge data, double distance, Node other)
@@ -164,7 +164,7 @@ namespace GPS
                 if (graph.deletedIds.Contains(idx)) throw new InvalidOperationException("Node is deleted");
                 graph.connections[idx].Remove(other.idx);
 
-                Program.DbContext.SaveChanges();
+                graph.SaveChanges();
             }
 
             /// <summary>
@@ -186,7 +186,7 @@ namespace GPS
                 graph.connections.Remove(idx);
                 graph.data.Remove(idx);
 
-                Program.DbContext.SaveChanges();
+                graph.SaveChanges();
             }
 
             public static bool operator ==(Node node1, Node node2)

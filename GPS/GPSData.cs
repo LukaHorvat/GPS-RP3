@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace GPS
 {
@@ -14,10 +15,12 @@ namespace GPS
     {
         Store,
         PostOffice,
-        GasStation
+        GasStation,
+        Garage,
+        Hospital
     }
 
-    [Table("GPSItemCharacteristic")]
+    [Table("GPSCharacteristic")]
     public class GPSCharacteristic
     {
         [Key]
@@ -33,6 +36,7 @@ namespace GPS
         [Key]
         public int GPSNodeId { get; set; }
         public PointF Location { get; set; }
+        [JsonIgnore]
         public Control AssociatedControl { get; set; }
         public List<GPSCharacteristic> Characteristics { get; set; }
         public string Name { get; set; }
@@ -47,6 +51,7 @@ namespace GPS
     {
         [Key]
         public int GPSStreetId;
+        [JsonIgnore]
         public Control AssociatedControl { get; set; }
         public List<GPSCharacteristic> Characteristics { get; set; }
         public string Name { get; set; }

@@ -28,6 +28,15 @@ namespace GPS.Views
             //this.graph = new GPSGraph();  //comment this once database works
             InitializeComponent();
             CustomizeComponent();
+
+            foreach (var node in graph.Nodes)
+            {
+                node.Data.AssociatedControl = area.addButtonForNode(node.Data.Location.X, node.Data.Location.Y, node);
+            }
+            foreach (var conn in graph.connections.SelectMany(p1 => p1.Value.Select(p2 => Tuple.Create(p1.Key, p2.Key, p2.Value))))
+            {
+                createStreetButton(graph.NodeFromIndex(conn.Item1), graph.NodeFromIndex(conn.Item2), conn.Item3.Item1);
+            }
         }
 
         public void CustomizeComponent()
@@ -78,6 +87,7 @@ namespace GPS.Views
             System.Threading.Thread.Sleep(500);
             var addStreetNameForm = new AddStreetNameForm(street);
             addStreetNameForm.ShowDialog();
+            Program.DbContext.SaveChanges();
         }
 
         public void createStreetButton(GPSGraph.Node node1, GPSGraph.Node node2, GPSStreet street)
@@ -113,6 +123,7 @@ namespace GPS.Views
             var addStreetNameForm = new AddStreetNameForm(street);
             addStreetNameForm.ShowDialog();
             this.nodeSelected = false;
+            Program.DbContext.SaveChanges();
         }
 
         public void SelectNode(GPSGraph.Node node)

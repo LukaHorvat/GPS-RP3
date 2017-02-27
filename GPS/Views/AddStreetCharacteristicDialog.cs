@@ -44,6 +44,7 @@ namespace GPS.Views
             characteristic.Name = this.textBox1.Text;
             characteristic.Description = this.richTextBox1.Text;
             street.Characteristics.Add(characteristic);
+            Program.DbContext.SaveChanges();
             Close();
         }
     }
