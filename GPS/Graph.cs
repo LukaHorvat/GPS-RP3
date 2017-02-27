@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using Newtonsoft.Json;
 
 namespace GPS
 {
@@ -22,11 +23,33 @@ namespace GPS
     [Table("Graph")]
     public class Graph<TNode, TEdge>
     {
-        [Key]
-        public int GraphId;
-        public string graphName {get; set;}
-        public void LoadFromDb() { throw new NotImplementedException(); }
-        public void SaveToDb() { throw new NotImplementedException(); }
+        public string GraphName { get; set; }
+
+        public virtual void SaveChanges() { }
+
+        public string Connections
+        {
+            get { return JsonConvert.SerializeObject(connections); }
+            set { connections = JsonConvert.DeserializeObject<Dictionary<int, Dictionary<int, Tuple<TEdge, double>>>>(value); }
+        }
+
+        public string Data
+        {
+            get { return JsonConvert.SerializeObject(data); }
+            set { data = JsonConvert.DeserializeObject<Dictionary<int, TNode>>(value); }
+        }
+
+        public string UsedIds
+        {
+            get { return JsonConvert.SerializeObject(usedIds); }
+            set { usedIds = JsonConvert.DeserializeObject<SortedSet<int>>(value); }
+        }
+
+        public string DeletedIds
+        {
+            get { return JsonConvert.SerializeObject(deletedIds); }
+            set { deletedIds = JsonConvert.DeserializeObject<SortedSet<int>>(value); }
+        }
 
         private Dictionary<int, Dictionary<int, Tuple<TEdge, double>>> connections;
         private Dictionary<int, TNode> data;
@@ -62,6 +85,7 @@ namespace GPS
             usedIds.Add(id);
             connections.Add(id, new Dictionary<int, Tuple<TEdge, double>>());
             this.data.Add(id, data);
+            SaveChanges();
             return NodeFromIndex(id);
         }
 
@@ -108,6 +132,8 @@ namespace GPS
                 if (graph != other.graph) throw new InvalidOperationException("Cannot connect nodes that don't belong to the same graph");
                 if (graph.deletedIds.Contains(idx)) throw new InvalidOperationException("Node is deleted");
                 graph.connections[idx][other.idx] = Tuple.Create(data, distance);
+
+                Program.DbContext.SaveChanges();
             }
 
             public void ConnectBothWays(TEdge data, double distance, Node other)
@@ -126,7 +152,7 @@ namespace GPS
                     }
                 }
                 return default(TEdge);
-            } 
+            }
 
             /// <summary>
             /// Disconnect two nodes. They must belong to the same graph.
@@ -137,6 +163,8 @@ namespace GPS
                 if (graph != other.graph) throw new InvalidOperationException("Cannot disconnect nodes that don't belong to the same graph");
                 if (graph.deletedIds.Contains(idx)) throw new InvalidOperationException("Node is deleted");
                 graph.connections[idx].Remove(other.idx);
+
+                Program.DbContext.SaveChanges();
             }
 
             /// <summary>
@@ -157,6 +185,8 @@ namespace GPS
                 graph.deletedIds.Add(idx);
                 graph.connections.Remove(idx);
                 graph.data.Remove(idx);
+
+                Program.DbContext.SaveChanges();
             }
 
             public static bool operator ==(Node node1, Node node2)

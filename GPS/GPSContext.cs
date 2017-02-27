@@ -12,6 +12,12 @@ namespace GPS
     {
         [Key]
         public int GPSGraphId { get; set; }
+
+        public override void SaveChanges()
+        {
+            Program.DbContext.Entry(this).State = EntityState.Modified;
+            Program.DbContext.SaveChanges();
+        }
     }
     class GPSContext : DbContext
     {

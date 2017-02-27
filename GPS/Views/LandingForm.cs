@@ -29,7 +29,7 @@ namespace GPS.Views
             var entities = Program.DbContext.Graphs;
             foreach (var entity in entities)
             {
-                var name = entity.graphName;
+                var name = entity.GraphName;
                 if (name == null || name.Trim() == "") continue;
                 if (this.GraphsInfo.ContainsKey(name)) continue;
                 this.listBox1.Items.Add(name);
@@ -63,6 +63,7 @@ namespace GPS.Views
 
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
+            if (e.Index == -1) return;
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
             {
                 e.Graphics.FillRectangle(Brushes.LightBlue, e.Bounds);
@@ -115,7 +116,7 @@ namespace GPS.Views
             var name = this.richTextBox1.Text;
             if (name.Trim() != "")
             {
-                graph.graphName = name.Trim();
+                graph.GraphName = name.Trim();
                 Program.DbContext.Graphs.Add(graph);
                 Program.DbContext.SaveChanges();
                 this.listBox1.Hide();

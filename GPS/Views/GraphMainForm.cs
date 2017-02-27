@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace GPS.Views
 {
-    public partial class GraphMainForm: Form
+    public partial class GraphMainForm : Form
     {
         public int graphId;
         public bool nodeSelected = false;
@@ -25,7 +25,7 @@ namespace GPS.Views
             this.graph = Program.DbContext.Graphs
                 .Where(g => g.GPSGraphId == graphId)
                 .FirstOrDefault();
-            this.graph = new GPSGraph();  //comment this once database works
+            //this.graph = new GPSGraph();  //comment this once database works
             InitializeComponent();
             CustomizeComponent();
         }
@@ -41,7 +41,7 @@ namespace GPS.Views
         {
             var addNodeForm = new AddNodeForm();
             addNodeForm.creator = this;
-;            addNodeForm.ShowDialog();
+            ; addNodeForm.ShowDialog();
         }
 
         private void cleanGraphToolStripMenuItem_Click(object sender, EventArgs e)
@@ -50,7 +50,8 @@ namespace GPS.Views
             this.area.GraphCleared();
         }
 
-        public void NodeCreated(string name, float xCoordinate, float yCoodrinate) {
+        public void NodeCreated(string name, float xCoordinate, float yCoodrinate)
+        {
             if (graph == null) return;
             var newNode = new GPSNode();
             newNode.Location = new PointF(xCoordinate, yCoodrinate);
@@ -64,7 +65,7 @@ namespace GPS.Views
         public void CreateOneWayConnection(GPSGraph.Node node)
         {
             GPSGraph.Node originNode = this.lastSelectedNode;
-            if(originNode.IsConnectedTo(node))
+            if (originNode.IsConnectedTo(node))
             {
                 MessageBox.Show("Nodes are already connected");
                 return;
@@ -79,11 +80,11 @@ namespace GPS.Views
             addStreetNameForm.ShowDialog();
         }
 
-        public void createStreetButton(GPSGraph.Node node1, GPSGraph.Node node2, GPSStreet street) 
+        public void createStreetButton(GPSGraph.Node node1, GPSGraph.Node node2, GPSStreet street)
         {
             var button = new LocationStreetButton(Color.Red, Color.OrangeRed, 16, 16);
             var middleX = (int)(node1.Data.Location.X + node2.Data.Location.X) / 2 + node1.Data.AssociatedControl.Height / 2 - 8;
-            var middleY = (int)(node1.Data.Location.Y + node2.Data.Location.Y) / 2 + node1.Data.AssociatedControl.Height / 2 - 8; 
+            var middleY = (int)(node1.Data.Location.Y + node2.Data.Location.Y) / 2 + node1.Data.AssociatedControl.Height / 2 - 8;
             button.Location = new Point(middleX, middleY);
             button.street = street;
             button.creator = this;
@@ -123,7 +124,7 @@ namespace GPS.Views
         public void CalculateShortestPath(GPSGraph.Node node)
         {
             try
-            { 
+            {
                 this.area.highlighted = this.lastSelectedNode.GetBestPath(node,
                     new List<Predicate<GPSNode>>());
                 if (this.area.highlighted.Count() == 0)
@@ -133,7 +134,8 @@ namespace GPS.Views
                 this.calculatingPath = true;
                 this.area.GraphChanged();
                 this.calculatingPath = false;
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("No available routes");
             }
@@ -189,7 +191,8 @@ namespace GPS.Views
         public void CalculateShortestPathWithCriteria(GPSGraph.Node node, List<Tuple<string, string>> criteria)
         {
             var criteriaPredicates = new List<Predicate<GPSNode>>();
-            foreach (var cr in criteria) {
+            foreach (var cr in criteria)
+            {
                 Predicate<GPSNode> namePredicate = delegate (GPSNode g)
                 {
                     foreach (var c in g.Characteristics)
@@ -206,7 +209,8 @@ namespace GPS.Views
                 this.calculatingPath = true;
                 this.area.GraphChanged();
                 this.calculatingPath = false;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("No available route");
             }

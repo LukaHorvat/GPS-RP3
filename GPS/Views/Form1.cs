@@ -17,16 +17,16 @@ namespace GPS
         {
             InitializeComponent();
             var graph1 = new GPSGraph();
-            graph1.graphName = "Zagreb";
+            graph1.GraphName = "Zagreb";
             var graph2 = new GPSGraph();
-            graph2.graphName = "Varaždin";
+            graph2.GraphName = "Varaždin";
             var node1 = new GPSNode { Name = "Kvatric" };
             var KvatricNode = graph1.NewNode(node1);
             Program.DbContext.Graphs.Add(graph1);
             Program.DbContext.Graphs.Add(graph2);
             Program.DbContext.SaveChanges();
             var graph = Program.DbContext.Graphs.First();
-            Debug.WriteLine(graph.graphName);
+            Debug.WriteLine(graph.GraphName);
             // Debug.WriteLine(graph);
             // Debug.WriteLine(Program.DbContext.Graphs.Count());
             //Debug.WriteLine(graph.data.Count());

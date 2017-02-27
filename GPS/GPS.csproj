@@ -84,6 +84,10 @@
       <HintPath>..\packages\Microsoft.Extensions.Primitives.1.1.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +141,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201702271309566_graph.cs" />
+    <Compile Include="Migrations\201702271309566_graph.Designer.cs">
+      <DependentUpon>201702271309566_graph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702271318029_graph1.cs" />
+    <Compile Include="Migrations\201702271318029_graph1.Designer.cs">
+      <DependentUpon>201702271318029_graph1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702271354282_graph2.cs" />
+    <Compile Include="Migrations\201702271354282_graph2.Designer.cs">
+      <DependentUpon>201702271354282_graph2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateItemFromExisting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -249,6 +265,15 @@
     </Compile>
     <EmbeddedResource Include="Migrations\201702171355439_initial.resx">
       <DependentUpon>201702171355439_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702271309566_graph.resx">
+      <DependentUpon>201702271309566_graph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702271318029_graph1.resx">
+      <DependentUpon>201702271318029_graph1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702271354282_graph2.resx">
+      <DependentUpon>201702271354282_graph2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
